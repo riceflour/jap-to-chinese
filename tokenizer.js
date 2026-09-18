@@ -27,8 +27,13 @@ function katakanaToHiragana(katakana) {
 
 /**
  * Tokenizes Japanese text into words, each with its surface form,
- * hiragana reading, and part of speech.
- * Returns: [{ surface, reading, pos, chinese: "" }, ...]
+ * hiragana reading, dictionary (base) form, and part of speech.
+ *
+ * `basicForm` matters a lot for dictionary lookup: a conjugated verb like
+ * 勉強しています won't be found in JMdict directly, but its basic_form
+ * (勉強する) will be.
+ *
+ * Returns: [{ surface, reading, basicForm, pos, chinese: "", english: "" }, ...]
  */
 export async function tokenize(text) {
   const tokenizer = await getTokenizer();
@@ -36,11 +41,14 @@ export async function tokenize(text) {
 
   return rawTokens.map((t) => {
     const reading = t.reading && t.reading !== "*" ? t.reading : t.surface_form;
+    const basicForm = t.basic_form && t.basic_form !== "*" ? t.basic_form : t.surface_form;
     return {
       surface: t.surface_form,
       reading: katakanaToHiragana(reading),
+      basicForm,
       pos: t.pos, // e.g. "名詞" (noun), "動詞" (verb), "助詞" (particle)
       chinese: "",
+      english: "",
     };
   });
 }
