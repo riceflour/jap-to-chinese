@@ -1,0 +1,13 @@
+{
+  "name": "jp-zh-translator",
+  "version": "1.0.0",
+  "description": "Tokenizes Japanese text with furigana readings and gets Chinese + English translations from a local LibreTranslate server.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "kuromoji": "^0.1.2"
+  }
+}
